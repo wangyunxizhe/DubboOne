@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -36,11 +35,19 @@ public class RecordServiceImpl implements RecordService {
 
     /**
      * 下单服务
+     * <p>
+     * 注意：使用dubbo框架的rest协议时，在配置完成后使用以下请求，可直接从浏览器请求到生产者的接口
+     * http://localhost:9013/dubboone/record/create
+     * 详细配置：
+     * 1)端口配置在dubbo.properties中的dubbo.protocol.rest.port
+     * 2)路径中的dubboone为自定义的上下文，配置在spring-dubbo.xml中，name为rest的<dubbo:protoco>标签中
+     * 3)/record/create与springmvc中的@RequestMapping注解效果类似，dubbo中使用@Path注解，
+     * 作用都是表明请求时的详细路径
      */
     @Override
     @Path("create")
-    @POST//以post方式，这是dubbo的注解
-    @Consumes(value = MediaType.APPLICATION_JSON)//以json格式异步，而非表单
+    @POST//当dubbo使用http协议时（即rest），必须以post方式请求。注意：这是dubbo的注解
+    @Consumes(value = MediaType.APPLICATION_JSON)//以json格式提交请求参数
     @Produces(value = MediaType.APPLICATION_JSON)
     public BaseResponse createOrder(CreateOrderDto dto) {
         if (dto.getItemId() == null || dto.getItemId() <= 0 ||
