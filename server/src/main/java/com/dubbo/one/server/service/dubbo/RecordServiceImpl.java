@@ -21,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 
+//注意：这里的@Service注解是dubbo中的，而不是spring的
 @Service(protocol = {"dubbo", "rest"}, validation = "true", version = "1.0", timeout = 3000)
 @Path("record")
 public class RecordServiceImpl implements RecordService {
